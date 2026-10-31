@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ברוול אקדמי">
+<meta name="theme-color" content="#1b1f3b">
+<title>ברוול אקדמי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1b1f3b; --bg2:#262b52; --card:#2f3566; --txt:#ffffff; --muted:#b7bce0;
+  --yellow:#ffd400; --blue:#2f8cff; --green:#39d353; --red:#ff4d5e; --orange:#ff9f1a; --purple:#b05cff; --pink:#ff6fae;
+  --r-rare:#39d353; --r-sr:#2f8cff; --r-epic:#b05cff; --r-mythic:#ff4d5e; --r-leg:#ffd400;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--txt);font-family:"Varela Round",-apple-system,"Segoe UI",Arial,sans-serif;touch-action:manipulation;-webkit-user-select:none;user-select:none;min-height:100%}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#app{max-width:560px;margin:0 auto;padding:12px 14px 40px;min-height:100vh}
+h1,h2,h3{margin:8px 0;line-height:1.2}
+h1{font-size:30px;color:var(--yellow);text-shadow:0 3px 0 #7a5a00}
+h2{font-size:24px}
+p{line-height:1.5;margin:6px 0}
+.muted{color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center}
+.wrap{flex-wrap:wrap}
+.sp{justify-content:space-between}
+.center{text-align:center}
+.grow{flex:1}
+button{font-family:inherit;font-size:20px;border:0;border-radius:18px;padding:14px 18px;min-height:58px;cursor:pointer;color:#fff;background:var(--blue);box-shadow:0 5px 0 rgba(0,0,0,.35);transition:transform .05s}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+button.y{background:var(--yellow);color:#3a2a00}
+button.g{background:var(--green);color:#063}
+button.r{background:var(--red)}
+button.o{background:var(--orange);color:#3a2a00}
+button.p{background:var(--purple)}
+button.gray{background:#4a5080}
+button.small{font-size:16px;min-height:44px;padding:8px 14px;border-radius:14px}
+button.big{font-size:26px;min-height:72px;width:100%}
+button:disabled{opacity:.5}
+.card{background:var(--card);border-radius:22px;padding:16px;margin:10px 0;box-shadow:0 6px 0 rgba(0,0,0,.3)}
+.card.flat{background:var(--bg2)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.pill{background:var(--bg2);border-radius:999px;padding:8px 14px;font-size:18px;white-space:nowrap;display:inline-flex;gap:6px;align-items:center}
+.pill b{color:var(--yellow)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mode{background:var(--card);border-radius:22px;padding:14px;text-align:center;box-shadow:0 6px 0 rgba(0,0,0,.3);cursor:pointer;position:relative}
+.mode:active{transform:translateY(3px)}
+.mode .ic{font-size:44px;line-height:1}
+.mode .nm{font-size:20px;margin-top:6px}
+.mode .sub{font-size:14px;color:var(--muted);margin-top:2px}
+.badge{display:inline-block;border-radius:999px;padding:3px 10px;font-size:14px;margin-top:6px;color:#111;font-weight:bold}
+.rare{background:var(--r-rare)}.sr{background:var(--r-sr);color:#fff}.epic{background:var(--r-epic);color:#fff}.mythic{background:var(--r-mythic);color:#fff}.leg{background:var(--r-leg)}
+.ultra{background:linear-gradient(90deg,#ff4d5e,#ff9f1a,#ffd400,#39d353,#2f8cff,#b05cff);color:#111}
+.question{font-size:28px;text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:10px}
+.question .math{font-size:44px;direction:ltr;unicode-bidi:isolate;letter-spacing:2px}
+.question .word{font-size:48px;letter-spacing:4px}
+.question .word .blank{display:inline-block;width:44px;height:1em;vertical-align:bottom;background:#111535;border-radius:10px;border-bottom:6px solid var(--yellow)}
+.question .emoji{font-size:72px;line-height:1.1}
+.vert{direction:ltr;unicode-bidi:isolate;display:inline-block;text-align:right;font-size:46px;font-variant-numeric:tabular-nums;line-height:1.15;padding:0 10px}
+.vert div:last-child{border-bottom:4px solid #fff;padding-bottom:2px}
+.vert span{display:inline-block;width:1.2em;text-align:left}
+.score{display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border-radius:18px;padding:8px 14px;margin:8px 0;font-size:20px}
+.score b{font-size:30px;color:var(--yellow)}
+.score .av{width:44px;height:52px;background:#fff;border-radius:10px;overflow:hidden}.score .av svg{width:100%;height:100%}
+.answerbox{font-size:44px;text-align:center;background:#111535;border-radius:16px;min-height:70px;line-height:70px;direction:ltr;margin:8px 0;color:var(--yellow)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;direction:ltr}
+.keypad button{font-size:30px;min-height:62px;background:var(--bg2)}
+.keypad button.ok{background:var(--green);color:#063}
+.keypad button.del{background:#4a5080}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts button{font-size:26px;min-height:70px;background:var(--bg2)}
+.opts.one{grid-template-columns:1fr}
+.opts button.letter{font-size:44px}
+.reveal{position:relative;width:200px;height:240px;margin:0 auto;border-radius:18px;overflow:hidden;background:#fff}
+.reveal svg{width:100%;height:100%;display:block}
+.tiles{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)}
+.tile{background:linear-gradient(135deg,#4a5080,#2f3566);border:1px solid #1b1f3b;display:flex;align-items:center;justify-content:center;font-size:28px;transition:transform .4s,opacity .4s}
+.tile.gone{transform:scale(0) rotate(30deg);opacity:0;pointer-events:none}
+.progress{height:14px;background:#111535;border-radius:999px;overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:var(--yellow);transition:width .4s;border-radius:999px}
+.progress.hp i{background:var(--red)}
+.fb{position:fixed;left:0;right:0;top:18%;z-index:50;display:flex;justify-content:center;pointer-events:none}
+.fb div{background:var(--green);color:#063;padding:18px 28px;border-radius:22px;font-size:28px;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:pop .5s ease-out;text-align:center;max-width:90%}
+.fb div.bad{background:var(--orange);color:#3a2a00}
+@keyframes pop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#000c;color:#fff;padding:12px 20px;border-radius:999px;font-size:18px;z-index:60;animation:pop .4s}
+.drop{width:170px;height:170px;margin:16px auto;border-radius:30px;display:flex;align-items:center;justify-content:center;font-size:80px;box-shadow:0 10px 0 rgba(0,0,0,.35);cursor:pointer}
+.drop.shake{animation:shake .6s infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg) scale(1.03)}75%{transform:rotate(6deg) scale(1.03)}}
+.bounce{animation:bounce .8s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.avatar{width:120px;height:144px;background:#fff;border-radius:20px;overflow:hidden;margin:0 auto}
+.avatar svg{width:100%;height:100%}
+.avatar.sm{width:72px;height:86px;border-radius:14px}
+.brawlers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.bcard{background:var(--bg2);border-radius:18px;padding:8px;text-align:center;cursor:pointer;position:relative}
+.bcard.sel{outline:4px solid var(--yellow)}
+.bcard.locked .avatar{filter:grayscale(1) brightness(.6)}
+.bcard .nm{font-size:16px;margin-top:4px}
+.bcard .cost{font-size:14px;color:var(--yellow)}
+.color-svg{width:100%;max-width:420px;margin:0 auto;background:#fff;border-radius:22px;display:block}
+.color-svg .rg{cursor:pointer}
+.palette{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin:12px 0}
+.swatch{height:46px;border-radius:14px;border:4px solid transparent;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.swatch.sel{border-color:#fff;transform:scale(1.08)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gallery .avatar{width:100%;height:auto;aspect-ratio:200/240}
+input[type=text],input[type=number]{font-family:inherit;font-size:22px;padding:12px;border-radius:14px;border:0;width:100%;background:#111535;color:#fff;text-align:center}
+.stat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ffffff14;font-size:18px}
+.lvl{display:inline-block;background:var(--bg2);border-radius:999px;padding:2px 10px;color:var(--yellow)}
+.hidden{display:none}
+#printArea{display:none}
+@media print{
+  body{background:#fff}
+  #app,.fb,.toast{display:none!important}
+  #printArea{display:block;text-align:center}
+  #printArea svg{width:17cm;height:auto}
+  #printArea h2{font-family:Arial;color:#000;font-size:28pt}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="printArea"></div>
+<script>
+/* ===================== כלים ===================== */
+const $=s=>document.querySelector(s);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const today=()=>new Date().toISOString().slice(0,10);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ===================== שמירה ===================== */
+const KEY='brawlAcademy_v1';
+const DEFAULT={name:'',grade:'c',brawler:'shelly',coins:0,trophies:0,claimed:[],unlocked:['shelly'],diag:false,
+  levels:{add:1,sub:1,mul:1,div:1,word:1,spell:1,gram:1,vocab:1},
+  stats:{answered:0,correct:0,battles:0,misses:{},perTopic:{}},
+  gallery:[],days:{last:'',streak:0,todayCount:0},custom:[],settings:{sound:true,speech:true}};
+let S=load();
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){return deepMerge(JSON.parse(JSON.stringify(DEFAULT)),s)}}catch(e){}return JSON.parse(JSON.stringify(DEFAULT));}
+function deepMerge(a,b){for(const k in b){if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])&&a[k]&&typeof a[k]==='object'){deepMerge(a[k],b[k])}else a[k]=b[k]}return a}
+function save(){applyGrade();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ===================== צליל ודיבור ===================== */
+let AC=null;
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,t,d,type='sine',vol=.18){const c=ac();if(!c||!S.settings.sound)return;const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(vol,c.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+t+d);o.connect(g);g.connect(c.destination);o.start(c.currentTime+t);o.stop(c.currentTime+t+d+.02)}
+const SND={
+  good(){tone(523,0,.12);tone(659,.1,.12);tone(784,.2,.2)},
+  bad(){tone(220,0,.25,'triangle');tone(180,.15,.3,'triangle')},
+  tap(){tone(600,0,.05,'square',.06)},
+  fanfare(){[523,659,784,1046].forEach((f,i)=>tone(f,i*.12,.3));tone(1318,.5,.6)},
+  ultra(){[392,523,659,784,1046,1318,1568].forEach((f,i)=>tone(f,i*.08,.35,'sawtooth',.08));tone(2093,.6,.9)},
+  coin(){tone(1200,0,.08,'square',.08);tone(1600,.07,.12,'square',.08)}
+};
+function speak(t){if(!S.settings.speech||!('speechSynthesis' in window))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='he-IL';u.rate=.9;const v=speechSynthesis.getVoices().find(v=>v.lang&&v.lang.startsWith('he'));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}}
+
+/* ===================== דרגות נדירות (חוק הפרסים של יהב) ===================== */
+const RAR={
+  rare:{nm:'נדיר',cls:'rare',coins:5,ic:'🟢',rank:1},
+  sr:{nm:'סופר-נדיר',cls:'sr',coins:10,ic:'🔵',rank:2},
+  epic:{nm:'אפי',cls:'epic',coins:15,ic:'🟣',rank:3},
+  mythic:{nm:'מיתי',cls:'mythic',coins:20,ic:'🔴',rank:4},
+  leg:{nm:'אגדי',cls:'leg',coins:30,ic:'🟡',rank:5},
+  ultra:{nm:'אולטרה אגדי',cls:'ultra',coins:50,ic:'🌈',rank:6}
+};
+const TOPIC_RAR={add:'rare',sub:'sr',ten:'leg',mul:'leg',div:'ultra',word:'mythic',spell:'epic',gram:'epic',vocab:'epic'};
+const FAIL_COINS=2;
+const TOPIC_NM={add:'חיבור',sub:'חיסור',ten:'השלמה לעשר',mul:'כפל',div:'חילוק',word:'בעיות מילוליות',spell:'כתיב',gram:'דקדוק',vocab:'אוצר מילים'};
+const MAXLVL_BY_GRADE={
+  a:{add:3,sub:3,ten:2,word:1,spell:2,gram:2,vocab:1},
+  b:{add:2,sub:2,mul:1,div:1,word:2,spell:2,gram:2,vocab:2},
+  c:{add:3,sub:3,mul:4,div:3,word:3,spell:3,gram:3,vocab:2}};
+const GRADE_NM={a:'כיתה א׳',b:'כיתה ב׳',c:'כיתה ג׳'};
+let MAXLVL=MAXLVL_BY_GRADE.c;
+function applyGrade(){MAXLVL=MAXLVL_BY_GRADE[S.grade]||MAXLVL_BY_GRADE.c;for(const t in MAXLVL){if(!S.levels[t])S.levels[t]=1;if(S.levels[t]>MAXLVL[t])S.levels[t]=MAXLVL[t]}}
+const gradeTopics=()=>Object.keys(MAXLVL);
+const hasTopic=t=>t in MAXLVL;
+applyGrade();
+
+/* ===================== ברוולרים (ציורים שלנו) ===================== */
+const EYES=(x1,x2,y,r=9)=>`<circle class="fx" fill="#fff" cx="${x1}" cy="${y}" r="${r}"/><circle class="fx" fill="#fff" cx="${x2}" cy="${y}" r="${r}"/><circle class="fx" fill="#222" cx="${x1+1}" cy="${y+1}" r="${r/2}"/><circle class="fx" fill="#222" cx="${x2+1}" cy="${y+1}" r="${r/2}"/>`;
+const SMILE=(y=124)=>`<path class="fx" d="M86 ${y} Q100 ${y+13} 114 ${y}" fill="none" stroke="#222" stroke-width="3.5" stroke-linecap="round"/>`;
+const BRAWLERS={
+  shelly:{nm:'שלי',g:'f',cost:0,rar:'rare',svg:`
+    <path class="rg" fill="#8e44ad" d="M42 122 Q28 28 100 32 Q172 28 158 122 L150 156 L50 156 Z"/>
+    <path class="rg" fill="#2f6fde" d="M55 152 Q100 132 145 152 L158 236 L42 236 Z"/>
+    <circle class="rg" fill="#f5c9a2" cx="100" cy="100" r="46"/>
+    <path class="rg" fill="#8e44ad" d="M54 96 Q58 44 100 48 Q142 44 146 96 Q130 70 100 78 Q70 70 54 96 Z"/>
+    <polygon class="rg" fill="#ffd400" points="100,168 106,184 123,184 109,194 114,210 100,200 86,210 91,194 77,184 94,184"/>
+    ${EYES(82,118,104)}${SMILE()}`},
+  colt:{nm:'קולט',g:'m',cost:100,rar:'rare',svg:`
+    <path class="rg" fill="#d6332e" d="M55 152 Q100 132 145 152 L158 236 L42 236 Z"/>
+    <circle class="rg" fill="#f5c9a2" cx="100" cy="100" r="46"/>
+    <path class="rg" fill="#6b3a1e" d="M50 96 Q44 28 106 38 Q152 46 150 96 Q130 64 100 76 Q74 60 50 96 Z"/>
+    <rect class="rg" fill="#222" x="42" y="196" width="116" height="16"/>
+    <polygon class="rg" fill="#ffd400" points="100,194 104,203 114,203 106,209 109,218 100,213 91,218 94,209 86,203 96,203"/>
+    ${EYES(82,118,104)}${SMILE()}`},
+  nita:{nm:'ניטה',g:'f',cost:150,rar:'sr',svg:`
+    <path class="rg" fill="#e67e22" d="M58 152 Q100 134 142 152 L162 236 L38 236 Z"/>
+    <circle class="rg" fill="#7a4a1e" cx="56" cy="56" r="17"/><circle class="rg" fill="#c98b5a" cx="56" cy="56" r="8"/>
+    <circle class="rg" fill="#7a4a1e" cx="144" cy="56" r="17"/><circle class="rg" fill="#c98b5a" cx="144" cy="56" r="8"/>
+    <circle class="rg" fill="#f5c9a2" cx="100" cy="102" r="46"/>
+    <path class="rg" fill="#7a4a1e" d="M46 104 Q46 40 100 40 Q154 40 154 104 Q130 88 100 92 Q70 88 46 104 Z"/>
+    <circle class="fx" fill="#ffb3c6" cx="72" cy="122" r="6"/><circle class="fx" fill="#ffb3c6" cx="128" cy="122" r="6"/>
+    ${EYES(82,118,106)}${SMILE(126)}`},
+  elprimo:{nm:'אל פרימו',g:'m',cost:250,rar:'sr',svg:`
+    <path class="rg" fill="#e0a878" d="M36 150 Q100 120 164 150 L180 236 L20 236 Z"/>
+    <path class="rg" fill="#222" d="M58 156 L74 236 L52 236 Z"/><path class="rg" fill="#222" d="M142 156 L148 236 L126 236 Z"/>
+    <rect class="rg" fill="#ffd400" x="36" y="200" width="128" height="18" rx="4"/>
+    <circle class="rg" fill="#27ae60" cx="100" cy="100" r="50"/>
+    <path class="rg" fill="#1e8449" d="M50 100 Q100 80 150 100 Q100 90 50 100 Z"/>
+    <ellipse class="fx" fill="#fff" cx="80" cy="100" rx="13" ry="10"/><ellipse class="fx" fill="#fff" cx="120" cy="100" rx="13" ry="10"/>
+    <circle class="fx" fill="#222" cx="81" cy="101" r="5"/><circle class="fx" fill="#222" cx="121" cy="101" r="5"/>
+    <ellipse class="rg" fill="#f5c9a2" cx="100" cy="130" rx="15" ry="9"/>${SMILE(128)}`},
+  spike:{nm:'ספייק',g:'m',cost:400,rar:'epic',svg:`
+    <rect class="rg" fill="#3aa655" x="28" y="112" width="30" height="60" rx="15"/>
+    <rect class="rg" fill="#3aa655" x="142" y="102" width="30" height="60" rx="15"/>
+    <rect class="rg" fill="#3aa655" x="62" y="58" width="76" height="178" rx="38"/>
+    <circle class="rg" fill="#ff6fae" cx="100" cy="32" r="12"/><circle class="rg" fill="#ff6fae" cx="84" cy="44" r="12"/><circle class="rg" fill="#ff6fae" cx="116" cy="44" r="12"/><circle class="rg" fill="#ff6fae" cx="88" cy="60" r="12"/><circle class="rg" fill="#ff6fae" cx="112" cy="60" r="12"/>
+    <circle class="rg" fill="#ffd400" cx="100" cy="48" r="9"/>
+    <g class="fx" stroke="#222" stroke-width="3" stroke-linecap="round"><path d="M70 100 l-8 -6"/><path d="M130 100 l8 -6"/><path d="M70 150 l-8 4"/><path d="M130 150 l8 4"/><path d="M80 200 l-6 6"/><path d="M120 200 l6 6"/></g>
+    <circle class="fx" fill="#222" cx="88" cy="112" r="5"/><circle class="fx" fill="#222" cx="112" cy="112" r="5"/>
+    <path class="fx" d="M90 132 Q100 142 110 132" fill="none" stroke="#222" stroke-width="3.5" stroke-linecap="round"/>`},
+  leon:{nm:'ליאון',g:'m',cost:600,rar:'leg',svg:`
+    <path class="rg" fill="#2ecc71" d="M52 158 Q100 140 148 158 L160 236 L40 236 Z"/>
+    <path class="rg" fill="#2ecc71" d="M38 118 Q38 28 100 28 Q162 28 162 118 Q162 158 100 158 Q38 158 38 118 Z"/>
+    <circle class="rg" fill="#ffd400" cx="72" cy="46" r="12"/><circle class="rg" fill="#ffd400" cx="128" cy="46" r="12"/>
+    <circle class="fx" fill="#222" cx="72" cy="46" r="5"/><circle class="fx" fill="#222" cx="128" cy="46" r="5"/>
+    <circle class="rg" fill="#3b3f57" cx="100" cy="106" r="38"/>
+    ${EYES(84,116,104,10)}
+    <path class="fx" d="M92 128 Q100 134 108 128" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <path class="fx" d="M90 160 l-4 24 M110 160 l4 24" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>`}
+};
+const BR_ORDER=['shelly','colt','nita','elprimo','spike','leon'];
+function brSVG(id,mode='color',fills=null){
+  let inner=BRAWLERS[id].svg;
+  if(mode==='outline'){inner=inner.replace(/class="rg" fill="[^"]*"/g,'class="rg" fill="#ffffff"')}
+  let svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" stroke="#222" stroke-width="3" stroke-linejoin="round">${inner}</svg>`;
+  if(fills){const d=document.createElement('div');d.innerHTML=svg;d.querySelectorAll('.rg').forEach((el,i)=>{if(fills[i])el.setAttribute('fill',fills[i])});svg=d.innerHTML}
+  return svg;
+}
+
+/* ===================== בנק עברית ===================== */
+const NAMES=[{n:'שלי',g:'f'},{n:'קולט',g:'m'},{n:'ניטה',g:'f'},{n:'ליאון',g:'m'},{n:'ספייק',g:'m'},{n:'אל פרימו',g:'m'},{n:'פוקו',g:'m'},{n:'ג׳סי',g:'f'},{n:'ברוק',g:'m'},{n:'קרואו',g:'m'},{n:'אדגר',g:'m'},{n:'סנדי',g:'m'},{n:'פייפר',g:'f'},{n:'בול',g:'m'}];
+// כתיב: [מילה, מיקום האות (0-based), אות נכונה, אות מבלבלת]
+const SPELL={
+ 1:[['שולחן',4,'ן','נ'],['מלך',2,'ך','כ'],['סוף',2,'ף','פ'],['ארץ',2,'ץ','צ'],['שלום',3,'ם','מ'],['כלבים',4,'ם','מ'],['דרך',2,'ך','כ'],['קוף',2,'ף','פ'],['חלון',3,'ן','נ'],['לחם',2,'ם','מ'],['עץ',1,'ץ','צ'],['ילדים',4,'ם','מ'],['בלון',3,'ן','נ'],['כסף',2,'ף','פ'],['רץ',1,'ץ','צ'],['חושך',3,'ך','כ'],['מים',2,'ם','מ'],['גן',1,'ן','נ'],['עוף',2,'ף','פ'],['מיץ',2,'ץ','צ'],
+    ['נמר',0,'נ','ן'],['פיל',0,'פ','ף'],['מלון',0,'מ','ם'],['צב',0,'צ','ץ'],['כדור',0,'כ','ך']],
+ 2:[['תפוח',0,'ת','ט'],['טלפון',0,'ט','ת'],['תמונה',0,'ת','ט'],['טיול',0,'ט','ת'],['מטריה',1,'ט','ת'],['תרנגול',0,'ת','ט'],['תיק',0,'ת','ט'],['טבעת',0,'ט','ת'],['מטוס',1,'ט','ת'],['תפוז',0,'ת','ט'],['תינוק',0,'ת','ט'],['חתול',1,'ת','ט'],['קטר',1,'ט','ת'],['מתנה',1,'ת','ט'],['בטן',1,'ט','ת'],['כתר',1,'ת','ט'],['עטלף',1,'ט','ת'],['תות',0,'ת','ט'],
+    ['כובע',0,'כ','ק'],['קוף',0,'ק','כ'],['כלב',0,'כ','ק'],['קיר',0,'ק','כ'],['כיסא',0,'כ','ק'],['קרח',0,'ק','כ'],['כדור',0,'כ','ק'],['קופסה',0,'ק','כ'],['כפית',0,'כ','ק'],['כוכב',0,'כ','ק'],['קשת',0,'ק','כ'],['מכונית',1,'כ','ק'],['מקל',1,'ק','כ'],['בקבוק',1,'ק','כ'],['כנף',0,'כ','ק'],['קוסם',0,'ק','כ'],['כביש',0,'כ','ק'],['קניון',0,'ק','כ']],
+ 3:[['ארנב',0,'א','ע'],['עגבנייה',0,'ע','א'],['אוזן',0,'א','ע'],['עין',0,'ע','א'],['עכבר',0,'ע','א'],['אריה',0,'א','ע'],['ענן',0,'ע','א'],['אגס',0,'א','ע'],['אבטיח',0,'א','ע'],['עיפרון',0,'ע','א'],['אופניים',0,'א','ע'],['עוגה',0,'ע','א'],['ערב',0,'ע','א'],['עיר',0,'ע','א'],['אוהל',0,'א','ע'],['עשר',0,'ע','א'],['אבן',0,'א','ע'],['עץ',0,'ע','א'],
+    ['סוס',0,'ס','ש'],['שמש',0,'ש','ס'],['סוכר',0,'ס','ש'],['שולחן',0,'ש','ס'],['סבתא',0,'ס','ש'],['שעון',0,'ש','ס'],['סירה',0,'ס','ש'],['שלג',0,'ש','ס'],['ספר',0,'ס','ש'],['שמיים',0,'ש','ס'],['סל',0,'ס','ש'],['סוכרייה',0,'ס','ש'],['שפן',0,'ש','ס'],['סוף',0,'ס','ש'],['שיר',0,'ש','ס'],['סביבון',0,'ס','ש'],['משחק',1,'ש','ס'],['מספר',1,'ס','ש'],
+    ['חנוכייה',5,'י','ו'],['שחייה',3,'י','ו'],['מצווה',3,'ו','י'],['תקווה',3,'ו','י']]
+};
+const EMOJI={'מלך':'👑','סוף':'🏁','ארץ':'🌍','שלום':'👋','כלבים':'🐶🐶','דרך':'🛣️','קוף':'🐒','חלון':'🪟','לחם':'🍞','עץ':'🌳','ילדים':'👧👦','בלון':'🎈','כסף':'💰','רץ':'🏃','חושך':'🌑','מים':'💧','גן':'🌷','עוף':'🍗','מיץ':'🧃','נמר':'🐯','פיל':'🐘','מלון':'🏨','צב':'🐢','כדור':'⚽','תפוח':'🍎','טלפון':'📱','תמונה':'🖼️','טיול':'🥾','מטריה':'☂️','תרנגול':'🐓','תיק':'🎒','טבעת':'💍','מטוס':'✈️','תפוז':'🍊','תינוק':'👶','חתול':'🐱','קטר':'🚂','מתנה':'🎁','כתר':'👑','עטלף':'🦇','תות':'🍓','כובע':'🧢','קיר':'🧱','כיסא':'🪑','קרח':'🧊','קופסה':'📦','כפית':'🥄','כוכב':'⭐','קשת':'🌈','מכונית':'🚗','בקבוק':'🍼','קוסם':'🧙','כביש':'🛣️','קניון':'🏬','ארנב':'🐰','עגבנייה':'🍅','אוזן':'👂','עין':'👁️','עכבר':'🐭','אריה':'🦁','ענן':'☁️','אגס':'🍐','אבטיח':'🍉','עיפרון':'✏️','אופניים':'🚲','עוגה':'🎂','ערב':'🌆','עיר':'🏙️','אוהל':'⛺','עשר':'🔟','אבן':'🪨','סוס':'🐴','שמש':'☀️','סבתא':'👵','שעון':'⌚','סירה':'⛵','שלג':'❄️','ספר':'📖','שמיים':'🌌','סל':'🧺','סוכרייה':'🍭','שפן':'🐇','שיר':'🎵','משחק':'🎮','מספר':'🔢','חנוכייה':'🕎','שחייה':'🏊','בטן':'🤰','מקל':'🏑','כנף':'🐦','סוכר':'🧁'};
+const PLURAL=[['ילד','ילדים'],['ילדה','ילדות'],['ספר','ספרים'],['חתול','חתולים'],['שולחן','שולחנות'],['חלון','חלונות'],['עיר','ערים'],['בית','בתים'],['איש','אנשים'],['אישה','נשים'],['יד','ידיים'],['רגל','רגליים'],['עין','עיניים'],['אוזן','אוזניים'],['פיל','פילים'],['פרה','פרות'],['כוכב','כוכבים'],['מכונית','מכוניות'],['דלת','דלתות'],['כיסא','כיסאות'],['שן','שיניים'],['יום','ימים'],['לילה','לילות'],['מורה','מורים'],['ציפור','ציפורים'],['כלב','כלבים'],['אבן','אבנים'],['דג','דגים'],['עץ','עצים'],['שבוע','שבועות']];
+const GENDER=[['שולחן','זכר'],['דלת','נקבה'],['כיסא','זכר'],['מכונית','נקבה'],['ספר','זכר'],['מחברת','נקבה'],['כלב','זכר'],['חתולה','נקבה'],['עיפרון','זכר'],['עוגה','נקבה'],['כדור','זכר'],['ארץ','נקבה'],['ים','זכר'],['רוח','נקבה'],['עיר','נקבה'],['בית','זכר'],['אבן','נקבה'],['שמש','נקבה'],['ירח','זכר'],['דרך','נקבה'],['כוס','נקבה'],['תיק','זכר'],['מיטה','נקבה'],['חלון','זכר'],['מספריים','זכר'],['ילקוט','זכר'],['שמלה','נקבה'],['ארון','זכר']];
+const TENSE=[['דני אכל תפוח.','עבר'],['שלי אוכלת גלידה.','הווה'],['מחר ליאון ייסע לים.','עתיד'],['אתמול ירד גשם.','עבר'],['עכשיו אני כותב.','הווה'],['בשבוע הבא נטייל.','עתיד'],['הכלב רץ בגינה.','הווה'],['ניטה שיחקה עם הדוב.','עבר'],['קולט יקנה סקין חדש.','עתיד'],['הילדים לומדים חשבון.','הווה'],['סבתא אפתה עוגה.','עבר'],['אנחנו נשחק ברוול בערב.','עתיד'],['ספייק ישן בשמש.','הווה'],['אל פרימו ניצח בקרב.','עבר'],['מתי תבוא אלינו?','עתיד']];
+const OPP=[['גדול','קטן'],['חם','קר'],['גבוה','נמוך'],['מהר','לאט'],['יום','לילה'],['פתוח','סגור'],['שמח','עצוב'],['חזק','חלש'],['ישן','חדש'],['קל','כבד'],['מלא','ריק'],['יבש','רטוב'],['ארוך','קצר'],['רחוק','קרוב'],['עשיר','עני'],['נקי','מלוכלך'],['מתוק','מר'],['שקט','רועש'],['למעלה','למטה'],['קדימה','אחורה'],['אור','חושך'],['התחלה','סוף'],['חבר','אויב'],['צעיר','זקן'],['רך','קשה']];
+const SYN=[['שמח','עליז'],['גדול','ענק'],['קטן','זעיר'],['יפה','נאה'],['חכם','פיקח'],['עצוב','מדוכדך'],['מהר','בזריזות'],['מפחיד','מאיים'],['חזק','עוצמתי'],['כועס','זועם'],['רעב','מורעב'],['עייף','תשוש'],['אוהב','חובב'],['אמר','הגיד'],['רץ','דהר'],['צעק','שאג'],['בכה','ייבב'],['הלך','צעד']];
+
+/* ===================== מחולל שאלות ===================== */
+function gfix(t,g){return t.replace(/\{([^|}]*)\|([^}]*)\}/g,(m,a,b)=>g==='m'?a:b)}
+function mathQ(topic,lvl){
+  let a,b,ans,text,hint,spk;
+  if(topic==='ten'){
+    const T=lvl===1?10:20;a=rnd(1,T-1);ans=T-a;text=`${a} + ? = ${T}`;spk=`${a} ועוד כמה שווה ${T}`;hint=`ספור מ-${a} עד ${T} על האצבעות`;
+    return {topic,type:'num',text,spk,ans:String(ans),hint,key:`ten:${text}`,vert:null};
+  }
+  if(S.grade==='a'&&(topic==='add'||topic==='sub')){
+    if(topic==='add'){if(lvl===1){a=rnd(1,9);b=rnd(1,10-a)}else if(lvl===2){a=rnd(1,10);b=rnd(1,10)}else{a=rnd(5,15);b=rnd(5,20-a)}ans=a+b;text=`${a} + ${b} = ?`;spk=`${a} ועוד ${b}`;hint=`התחל מ-${Math.max(a,b)} וספור קדימה ${Math.min(a,b)}`}
+    else{if(lvl===1){a=rnd(2,10);b=rnd(1,a)}else if(lvl===2){a=rnd(5,20);b=rnd(1,Math.min(10,a))}else{a=rnd(11,20);b=rnd(2,a-1)}ans=a-b;text=`${a} − ${b} = ?`;spk=`${a} פחות ${b}`;hint=`ספור אחורה מ-${a}, ${b} צעדים`}
+    return {topic,type:'num',text,spk,ans:String(ans),hint,key:`${topic}:${text}`,vert:null};
+  }
+  if(topic==='add'){
+    if(lvl===1){a=rnd(1,15);b=rnd(1,20-a)}else if(lvl===2){a=rnd(10,89);b=rnd(10,99-a)}else{a=rnd(100,899);b=rnd(100,999-a)}
+    ans=a+b;text=`${a} + ${b} = ?`;spk=`${a} ועוד ${b}`;var vert=lvl>=2?{a,b,op:'+'}:null;hint=lvl===1?`התחל מ-${Math.max(a,b)} וספור קדימה ${Math.min(a,b)}`:`פרק: קודם ${a} + ${Math.floor(b/10)*10} ואז עוד ${b%10}`;
+  }else if(topic==='sub'){
+    if(lvl===1){a=rnd(5,20);b=rnd(1,a)}else if(lvl===2){a=rnd(20,99);b=rnd(10,a-1)}else{a=rnd(200,999);b=rnd(100,a-1)}
+    ans=a-b;text=`${a} − ${b} = ?`;spk=`${a} פחות ${b}`;var vert=lvl>=2?{a,b,op:'−'}:null;hint=lvl===1?`ספור אחורה מ-${a}, ${b} צעדים`:`פרק: ${a} − ${Math.floor(b/10)*10} ואז עוד − ${b%10}`;
+  }else if(topic==='mul'){
+    const sets={1:[2,5,10],2:[3,4,6],3:[7,8,9],4:[2,3,4,5,6,7,8,9]};a=pick(sets[lvl]);b=rnd(1,10);if(Math.random()<.5)[a,b]=[b,a];
+    ans=a*b;text=`${a} × ${b} = ?`;spk=`${a} כפול ${b}`;hint=a<=5?`${Array(a).fill(b).join(' + ')}`:`${a} × ${b} = ${a} × ${b-1} + ${a} = ${a*(b-1)} + ${a}`;
+  }else if(topic==='div'){
+    if(lvl===1){b=pick([2,3,4,5,10]);a=b*rnd(1,10);ans=a/b;text=`${a} : ${b} = ?`;spk=`${a} חלקי ${b}`;hint=`איזה מספר כפול ${b} נותן ${a}?`}
+    else if(lvl===2){b=rnd(2,9);a=b*rnd(2,10);ans=a/b;text=`${a} : ${b} = ?`;spk=`${a} חלקי ${b}`;hint=`חפש בלוח הכפל של ${b}: ${b} × ? = ${a}`}
+    else{b=rnd(2,9);const q=rnd(2,9),r=rnd(1,b-1);a=b*q+r;if(Math.random()<.5){ans=q;text=`${a} : ${b} = ? (בלי השארית)`;spk=`${a} חלקי ${b}, כמה שלמים`;hint=`${b} × ${q} = ${b*q}, וזה הכי קרוב ל-${a} מלמטה`}else{ans=r;text=`${a} : ${b} — מה השארית?`;spk=`${a} חלקי ${b}, מה השארית`;hint=`${b} × ${q} = ${b*q}. כמה חסר עד ${a}?`}}
+  }
+  return {topic,type:'num',text,spk,ans:String(ans),hint,key:`${topic}:${text}`,vert:(typeof vert!=='undefined'?vert:null)};
+}
+function wordQ(lvl){
+  const p=pick(NAMES),p2=pick(NAMES.filter(x=>x.n!==p.n));let a,b,c,t,ans,hint;
+  const L=S.grade==='a'?[1,9]:lvl===1?[5,20]:lvl===2?[10,60]:[20,120];
+  const k=S.grade==='a'?pick(['add','sub']):lvl===3?pick(['two','mul','div']):pick(['add','sub','mul','div']);
+  if(k==='add'){a=rnd(...L);b=rnd(...L);ans=a+b;t=`ל${p.n} יש ${a} ג׳מים. ${p2.n} {נתן|נתנה} {לו|לה} עוד ${b}. כמה ג׳מים יש ל${p.n} עכשיו?`;hint=`זה חיבור: ${a} + ${b}`}
+  else if(k==='sub'){a=rnd(...L);b=rnd(1,a);ans=a-b;t=`ל${p.n} היו ${a} גביעים. {הוא|היא} {הפסיד|הפסידה} ${b} גביעים. כמה גביעים נשארו?`;hint=`זה חיסור: ${a} − ${b}`}
+  else if(k==='mul'){a=rnd(2,lvl===1?5:9);b=rnd(2,lvl===1?5:10);ans=a*b;t=`${p.n} {פותח|פותחת} ${a} קופסאות. בכל קופסה ${b} מטבעות. כמה מטבעות יש בסך הכול?`;hint=`${a} קופסאות × ${b} מטבעות`}
+  else if(k==='div'){b=rnd(2,lvl===1?4:8);a=b*rnd(2,lvl===1?5:10);ans=a/b;t=`${p.n} {מחלק|מחלקת} ${a} ג׳מים שווה בשווה בין ${b} חברים. כמה ג׳מים כל חבר מקבל?`;hint=`${a} : ${b}`}
+  else{a=rnd(50,150);b=rnd(10,a-20);c=rnd(5,40);ans=a-b+c;t=`ל${p.n} יש ${a} מטבעות. {הוא|היא} {קנה|קנתה} סקין ב-${b} מטבעות ואז {מצא|מצאה} עוד ${c}. כמה מטבעות יש {לו|לה} עכשיו?`;hint=`שני שלבים: קודם ${a} − ${b}, ואז + ${c}`}
+  t=gfix(t,p.g).replace(/\{([^|}]*)\|([^}]*)\}/g,'$1');
+  return {topic:'word',type:'num',text:t,spk:t,ans:String(ans),hint,key:'word:'+k+lvl,isWord:true};
+}
+function spellQ(lvl){
+  if(S.grade==='a'&&lvl===1){
+    const words=Object.keys(EMOJI).filter(w=>w.length>=3&&w.length<=6&&!/[םןץףך]/.test(w[0]));const w=pick(words);const first=w[0];
+    const letters='אבגדהוזחטיכלמנסעפצקרשת'.split('').filter(l=>l!==first);const opts=shuffle([first,...shuffle(letters).slice(0,2)]);
+    return {topic:'spell',type:'mc',letter:true,text:'_'+w.slice(1),word:w,emoji:EMOJI[w],spk:w,ans:first,opts,hint:`המילה היא "${w}". תגיד אותה לאט: ${first}...`,key:'spell:first:'+w,prompt:'באיזו אות מתחילה המילה?'};
+  }
+  if(S.grade==='a')lvl=1;
+  let bank=SPELL[Math.min(lvl,3)].slice();if(S.custom.length&&Math.random()<.35)bank=S.custom;
+  const [w,i,ok,bad]=pick(bank);
+  const shown=w.slice(0,i)+'_'+w.slice(i+1);
+  return {topic:'spell',type:'mc',letter:true,text:shown,word:w,emoji:EMOJI[w]||'',spk:w,ans:ok,opts:shuffle([ok,bad]),hint:`המילה היא "${w}"`,key:'spell:'+w,prompt:'איזו אות חסרה?'};
+}
+function gramQ(lvl){
+  if(lvl===1){const [s,p]=pick(PLURAL);const others=shuffle(PLURAL.filter(x=>x[1]!==p)).slice(0,3).map(x=>x[1]);
+    return {topic:'gram',type:'mc',text:`${s} ← ?`,prompt:'מה הרבים של המילה',spk:`מה הרבים של ${s}`,ans:p,opts:shuffle([p,...others]),hint:'זכר בדרך כלל ־ים, נקבה בדרך כלל ־ות',key:'gram:pl:'+s}}
+  if(lvl===2){const [w,g]=pick(GENDER);return {topic:'gram',type:'mc',text:w,prompt:'זכר או נקבה?',spk:`${w}. זכר או נקבה?`,ans:g,opts:['זכר','נקבה'],hint:`נסה: "${w} גדול" או "${w} גדולה"?`,key:'gram:g:'+w}}
+  const [s,t]=pick(TENSE);return {topic:'gram',type:'mc',text:s,prompt:'באיזה זמן המשפט?',spk:s,ans:t,opts:['עבר','הווה','עתיד'],hint:'עבר = כבר קרה. הווה = עכשיו. עתיד = עוד יקרה.',key:'gram:t:'+s};
+}
+function vocabQ(lvl){
+  if(lvl===1){const [a,b]=pick(OPP);const others=shuffle(OPP.filter(x=>x[0]!==a&&x[1]!==b)).slice(0,3).map(x=>x[1]);
+    return {topic:'vocab',type:'mc',text:a,prompt:'מה ההפך של',spk:`מה ההפך של ${a}`,ans:b,opts:shuffle([b,...others]),hint:'ההפך = בדיוק הפוך במשמעות',key:'vocab:opp:'+a}}
+  const [a,b]=pick(SYN);const others=shuffle(SYN.filter(x=>x[0]!==a)).slice(0,3).map(x=>x[1]);
+  return {topic:'vocab',type:'mc',text:a,prompt:'איזו מילה דומה במשמעות ל',spk:`איזו מילה דומה ל${a}`,ans:b,opts:shuffle([b,...others]),hint:'מילה נרדפת = אומרת אותו דבר במילה אחרת',key:'vocab:syn:'+a};
+}
+function genQ(topic,lvl){lvl=Math.max(1,Math.min(MAXLVL[topic],lvl));
+  if(['add','sub','mul','div','ten'].includes(topic))return mathQ(topic,lvl);
+  if(topic==='word')return wordQ(lvl);if(topic==='spell')return spellQ(lvl);if(topic==='gram')return gramQ(lvl);return vocabQ(lvl);}
+
+/* ===================== מסכים ===================== */
+const app=$('#app');
+function render(html){app.innerHTML=html;window.scrollTo(0,0)}
+function toast(t,ms=1800){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),ms)}
+function feedback(html,bad){const w=document.createElement('div');w.className='fb';w.innerHTML=`<div class="${bad?'bad':''}">${html}</div>`;document.body.appendChild(w);setTimeout(()=>w.remove(),bad?1900:1200)}
+function topbar(back){return `<div class="topbar">
+  ${back?`<button class="small gray" onclick="${back}">→ חזרה</button>`:`<span class="pill">👋 ${esc(S.name||'ברוולר')}</span>`}
+  <span class="pill">🏆 <b>${S.trophies}</b></span><span class="pill">🪙 <b>${S.coins}</b></span></div>`}
+
+function touchDay(){const t=today();if(S.days.last!==t){const y=new Date();y.setDate(y.getDate()-1);S.days.streak=(S.days.last===y.toISOString().slice(0,10))?S.days.streak+1:1;S.days.last=t;S.days.todayCount=0;save()}}
+
+/* --- פתיחה --- */
+function screenStart(){
+  if(S.name&&S.diag)return screenHome();
+  if(S.name&&!S.diag)return screenDiagIntro();
+  render(`<div class="center" style="padding-top:40px">
+    <h1>⭐ ברוול אקדמי ⭐</h1>
+    <div class="avatar bounce">${brSVG('shelly')}</div>
+    <p style="font-size:22px">היי! אני שלי. איך קוראים לך?</p>
+    <div class="card"><input type="text" id="nm" placeholder="השם שלך" maxlength="14" value="${esc(S.name)}"><p class="muted" style="margin-top:12px">באיזו כיתה אתה?</p><div class="row" id="gradeRow">${['a','b','c'].map(g=>`<button class="grow ${S.grade===g?'y':'gray'}" onclick="pickGrade('${g}')">${GRADE_NM[g]}</button>`).join('')}</div></div>
+    <button class="y big" onclick="setName()">בוא נתחיל! 🚀</button>
+  </div>`);
+  setTimeout(()=>$('#nm').focus(),100);
+}
+function pickGrade(g){S.grade=g;applyGrade();document.querySelectorAll('#gradeRow button').forEach((b,i)=>{b.className='grow '+(['a','b','c'][i]===g?'y':'gray')})}
+function setName(){const v=$('#nm').value.trim();if(!v){toast('כתוב את השם שלך 😊');return}S.name=v;save();ac();screenDiagIntro()}
+
+/* --- אבחון --- */
+function screenDiagIntro(){
+  render(`<div class="center" style="padding-top:30px">
+    <h1>בדיקת גביעים 🏆</h1>
+    <div class="avatar">${brSVG('shelly')}</div>
+    <div class="card"><p style="font-size:22px">${esc(S.name)}, בוא נבדוק איזה ברוולר מתאים לך!</p>
+    <p class="muted">כמה שאלות בחשבון וכמה בעברית. אין נכון ולא נכון — זה רק כדי שהמשחק יתאים לך בדיוק.</p></div>
+    <button class="y big" onclick="startDiag()">יאללה! 💪</button>
+    <p class="muted" style="margin-top:14px"><button class="small gray" onclick="skipDiag()">דלג (מתחילים מרמה 1)</button></p>
+  </div>`);
+}
+function skipDiag(){S.diag=true;save();screenHome()}
+let D=null;
+function startDiag(){
+  const dt=gradeTopics().filter(t=>t!=='word');D={topics:dt,ti:0,qi:0,cur:S.grade==='a'?1:2,lastOk:0,results:{},total:dt.length*3,done:0};
+  nextDiagQ();
+}
+function nextDiagQ(){if(!D)return;
+  if(D.qi>=3){const t=D.topics[D.ti];D.results[t]=Math.max(1,Math.min(D.cur,D.lastOk||1));D.ti++;D.qi=0;D.cur=S.grade==='a'?1:2;D.lastOk=0;
+    if(D.ti>=D.topics.length)return finishDiag();}
+  const t=D.topics[D.ti];const q=genQ(t,D.cur);
+  showQuestion(q,{title:`בדיקת גביעים · ${TOPIC_NM[t]}`,progress:D.done/D.total,noReward:true,onAnswer:(ok)=>{
+    D.done++;D.qi++;if(ok){D.lastOk=D.cur;D.cur=Math.min(MAXLVL[t],D.cur+1)}else{D.cur=Math.max(1,D.cur-1)}
+    D.timer=setTimeout(nextDiagQ,ok?900:1900);
+  }});
+}
+function finishDiag(){
+  S.levels=Object.assign({},S.levels,D.results);S.levels.word=Math.max(1,Math.min(MAXLVL.word,Math.round((S.levels.add+(S.levels.mul||1))/2)-1));
+  S.diag=true;S.coins+=50;save();SND.fanfare();
+  const strong=Object.entries(D.results).filter(([t,l])=>l>=MAXLVL[t]-1).map(([t])=>TOPIC_NM[t]);
+  const train=Object.entries(D.results).filter(([t,l])=>l===1).map(([t])=>TOPIC_NM[t]);
+  render(`<div class="center" style="padding-top:20px"><h1>כל הכבוד ${esc(S.name)}! 🎉</h1>
+    <div class="avatar bounce">${brSVG('shelly')}</div>
+    <div class="card"><h2>כרטיס הברוולר שלך</h2>
+    <p>💪 <b>כוחות-על:</b> ${strong.length?strong.join(', '):'הכול מתחיל להתחזק!'}</p>
+    <p>🏋️ <b>אימונים:</b> ${train.length?train.join(', '):'אין נקודות חלשות — וואו!'}</p>
+    <p style="font-size:24px;color:var(--yellow)">+50 🪙 בונוס פתיחה!</p></div>
+    <button class="y big" onclick="screenHome()">למשחק! 🎮</button></div>`);
+}
+
+/* --- בית --- */
+const MILESTONES=[10,25,50,100,150,200,300,400,500,750,1000,1500,2000];
+function checkMilestones(){let got=0;for(const m of MILESTONES){if(S.trophies>=m&&!S.claimed.includes(m)){S.claimed.push(m);got+=m}}if(got){S.coins+=got;save();setTimeout(()=>{toast(`🏆 דרך הגביעים! פרס: +${got} 🪙`);SND.coin()},600)}}
+function screenHome(){
+  touchDay();
+  const next=MILESTONES.find(m=>m>S.trophies)||S.trophies;const prev=MILESTONES.filter(m=>m<=S.trophies).pop()||0;
+  const pct=next>prev?Math.round((S.trophies-prev)/(next-prev)*100):100;
+  render(`${topbar()}
+  <div class="row" style="align-items:flex-start">
+    <div class="avatar sm" onclick="screenShop()">${brSVG(S.brawler)}</div>
+    <div class="grow"><h2 style="margin:0">${esc(BRAWLERS[S.brawler].nm)} <span class="pill" style="font-size:13px">${GRADE_NM[S.grade]}</span> ${S.days.streak>1?`<span class="pill" style="font-size:14px">🔥 ${S.days.streak} ימים</span>`:''}</h2>
+      <div class="progress"><i style="width:${pct}%"></i></div><div class="muted" style="font-size:14px">דרך הגביעים: <bdi dir="ltr">${S.trophies} / ${next}</bdi> 🏆 → פרס ${next} 🪙</div></div>
+  </div>
+  <h2 style="margin-top:14px">בחר קרב ⚔️</h2>
+  <div class="grid2">
+    <div class="mode" onclick="screenGemPick()"><div class="ic">💎</div><div class="nm">Gem Grab</div><div class="sub">חשבון מהיר</div><span class="badge ${hasTopic('div')?'ultra':'leg'}">${hasTopic('div')?'עד אולטרה אגדי':'עד אגדי'}</span></div>
+    <div class="mode" onclick="startBattle({mode:'showdown'})"><div class="ic">🌵</div><div class="nm">Showdown</div><div class="sub">כתיב</div><span class="badge epic">אפי</span></div>
+    <div class="mode" onclick="startBattle({mode:'brawlball'})"><div class="ic">⚽</div><div class="nm">Brawl Ball</div><div class="sub">בעיות מילוליות</div><span class="badge mythic">מיתי</span></div>
+    <div class="mode" onclick="startBattle({mode:'heist'})"><div class="ic">🔒</div><div class="nm">Heist</div><div class="sub">דקדוק ומילים</div><span class="badge epic">אפי</span></div>
+  </div>
+  <div class="mode" style="margin-top:12px" onclick="screenDuel()"><div class="ic">🥊</div><div class="nm">דו-קרב</div><div class="sub">${S.grade==='a'?'חיבור':'לוח הכפל'} נגד ברוולרים · ${S.unlocked.length} יריבים פתוחים</div><span class="badge leg">אגדי · בונוס ניצחון</span></div>
+  <div class="mode" style="margin-top:12px" onclick="startBattle({mode:'boss'})"><div class="ic">👹</div><div class="nm">Boss Fight</div><div class="sub">הכול מעורבב · 12 שאלות · בונוס גביעים</div><span class="badge ultra">Starr Drop אולטרה אגדי</span></div>
+  <div class="row" style="margin-top:14px">
+    <button class="gray grow" onclick="screenShop()">🛒 חנות ברוולרים</button>
+    <button class="gray grow" onclick="screenGallery()">🎨 הגלריה שלי</button>
+  </div>
+  <p class="center" style="margin-top:20px"><button class="small gray" onclick="screenParentGate()">👩‍👦 להורים</button></p>`);
+}
+function screenGemPick(){
+  render(`${topbar('screenHome()')}<h1 class="center">💎 Gem Grab</h1><p class="center muted">${GRADE_NM[S.grade]} · מה תפתור? ככה נראה הפרס:</p>
+  <div class="grid2">
+    ${['add','sub','ten','mul','div'].filter(hasTopic).map(t=>{const r=RAR[TOPIC_RAR[t]];return `<div class="mode" onclick="startBattle({mode:'gem',topic:'${t}'})"><div class="ic">${r.ic}</div><div class="nm">${TOPIC_NM[t]}</div><div class="sub">רמה ${S.levels[t]}</div><span class="badge ${r.cls}">${r.nm} · ${r.coins} 🪙</span></div>`}).join('')}
+  </div>
+  <p class="center muted" style="margin-top:14px">טעות = 2 🪙 (ורואים את התשובה)</p>`);
+}
+
+/* --- דו-קרב (לוח הכפל נגד ברוולרים) --- */
+const DUEL={shelly:{tables:[2,5,10],acc:.45},colt:{tables:[3,4],acc:.55},nita:{tables:[6,7],acc:.6},elprimo:{tables:[8,9],acc:.65},spike:{tables:[2,3,4,5,6,7,8,9],acc:.75},leon:{tables:[2,3,4,5,6,7,8,9],div:true,acc:.85}};
+const DUEL_TARGET=5;
+function screenDuel(){
+  S.duelWins=S.duelWins||{};
+  render(`${topbar('screenHome()')}<h1 class="center">🥊 ${S.grade==='a'?'דו-קרב חיבור וחיסור':'דו-קרב לוח הכפל'}</h1><p class="center muted">כל ברוולר שאתה קונה בחנות פותח יריב חדש. הראשון ל-${DUEL_TARGET} נקודות מנצח!</p>
+  <div class="brawlers">${BR_ORDER.map((b,i)=>{const open=S.unlocked.length>i;const d=DUEL[b];const w=S.duelWins[b]||0;
+    return `<div class="bcard ${open?'':'locked'}" onclick="${open?`startBattle({mode:'duel',opp:'${b}'})`:`toast('קנה עוד ברוולר בחנות כדי לפתוח את ${BRAWLERS[b].nm} 🛒')`}"><div class="avatar sm" style="margin:auto">${brSVG(b)}</div><div class="nm">${BRAWLERS[b].nm}</div><div class="muted" style="font-size:13px">${S.grade==='a'?'עד '+[10,10,20,20,20,20][i]:S.grade==='b'?'לוח 2, 5, 10':d.div?'כל הלוח + חילוק':'לוח '+d.tables.join(', ')}</div>${open?`<div class="cost">${w?'🏅 '+w+' ניצחונות':'עוד לא ניצחת'}</div>`:`<div class="cost">🔒 צריך ${i+1} ברוולרים</div>`}</div>`}).join('')}</div>`);
+}
+function duelQ(opp){const d=DUEL[opp];
+  if(S.grade==='a'){const T=[10,10,20,20,20,20][BR_ORDER.indexOf(opp)];let a=rnd(1,T-1),b=rnd(1,T-a);if(Math.random()<.3&&a>b){return {topic:'sub',type:'num',text:`${a} − ${b} = ?`,spk:`${a} פחות ${b}`,ans:String(a-b),hint:`ספור אחורה מ-${a}`,key:'duel:sub'}}
+    return {topic:'add',type:'num',text:`${a} + ${b} = ?`,spk:`${a} ועוד ${b}`,ans:String(a+b),hint:`התחל מ-${Math.max(a,b)} וספור קדימה`,key:'duel:add'}}
+  if(S.grade==='b'){let a=pick([2,5,10]),b=rnd(1,10);if(Math.random()<.5)[a,b]=[b,a];return {topic:'mul',type:'num',text:`${a} × ${b} = ?`,spk:`${a} כפול ${b}`,ans:String(a*b),hint:Array(Math.min(a,b)).fill(Math.max(a,b)).join(' + '),key:'duel:mul'}}if(d.div&&Math.random()<.4){const b=pick(d.tables),q=rnd(2,10),a=b*q;return {topic:'div',type:'num',text:`${a} : ${b} = ?`,spk:`${a} חלקי ${b}`,ans:String(q),hint:`${b} × ? = ${a}`,key:'duel:div'}}
+  let a=pick(d.tables),b=rnd(1,10);if(Math.random()<.5)[a,b]=[b,a];return {topic:'mul',type:'num',text:`${a} × ${b} = ?`,spk:`${a} כפול ${b}`,ans:String(a*b),hint:a<=5?Array(a).fill(b).join(' + '):`${a} × ${b-1} + ${a}`,key:'duel:mul'}}
+
+/* --- קרב --- */
+let B=null;
+function battleTopics(cfg){
+  if(cfg.mode==='gem')return [cfg.topic];
+  if(cfg.mode==='showdown')return ['spell'];
+  if(cfg.mode==='brawlball')return ['word'];
+  if(cfg.mode==='heist')return ['gram','gram','vocab'];
+  if(cfg.mode==='word')return ['word'];
+  return ['add','sub','mul','mul','div','div','word','spell','spell','gram','vocab','mul','ten','ten'].filter(hasTopic);
+}
+function startBattle(cfg){
+  ac();if(B&&B.timer)clearTimeout(B.timer);if(D&&D.timer){clearTimeout(D.timer);D=null}const topics=battleTopics(cfg);
+  B={cfg,topics,n:cfg.mode==='boss'?12:cfg.mode==='duel'?15:9,i:0,me:0,opp:0,correct:0,best:0,streak:0,wrongStreak:0,queue:[],brawler:cfg.mode==='duel'?cfg.opp:pick(BR_ORDER),revealed:0,hp:9,coinsEarned:0,retry:[]};
+  nextBattleQ();
+}
+function nextBattleQ(){
+  if(B.i>=B.n||(B.cfg.mode==='boss'&&B.hp<=0)||(B.cfg.mode==='duel'&&(B.me>=DUEL_TARGET||B.opp>=DUEL_TARGET)))return endBattle();
+  let q;
+  if(B.retry.length&&B.retry[0].at<=B.i){q=B.retry.shift().q;q.isRetry=true}
+  else if(B.cfg.mode==='duel'){q=duelQ(B.cfg.opp)}else{const t=B.cfg.mode==='boss'?B.topics[B.i%B.topics.length]:pick(B.topics);q=genQ(t,S.levels[t])}
+  const title=B.cfg.mode==='boss'?'👹 Boss Fight':B.cfg.mode==='duel'?'🥊 דו-קרב':{gem:'💎 Gem Grab',showdown:'🌵 Showdown',brawlball:'⚽ Brawl Ball',heist:'🔒 Heist'}[B.cfg.mode];
+  const header=B.cfg.mode==='duel'?`<div class="score"><span class="row"><span class="av">${brSVG(S.brawler)}</span>${esc(S.name)}</span><b><bdi dir="ltr">${B.me} : ${B.opp}</bdi></b><span class="row">${BRAWLERS[B.cfg.opp].nm}<span class="av">${brSVG(B.cfg.opp)}</span></span></div>`:'';
+  showQuestion(q,{title,header,progress:B.cfg.mode==='duel'?Math.max(B.me,B.opp)/DUEL_TARGET:B.i/B.n,boss:B.cfg.mode==='boss'?B.hp/9:null,reveal:true,onAnswer:(ok,q)=>{
+    B.i++;const t=q.topic;const st=S.stats;st.answered++;st.perTopic[t]=st.perTopic[t]||{a:0,c:0};st.perTopic[t].a++;
+    if(B.cfg.mode==='duel'){if(ok)B.me++;const oppOk=Math.random()<DUEL[B.cfg.opp].acc;if(oppOk)B.opp++;setTimeout(()=>toast(oppOk?`${BRAWLERS[B.cfg.opp].nm} ענה נכון 😬`:`${BRAWLERS[B.cfg.opp].nm} פספס! 😎`,1200),700)}
+    if(ok){
+      st.correct++;st.perTopic[t].c++;B.correct++;B.streak++;B.wrongStreak=0;B.revealed++;if(B.cfg.mode==='boss')B.hp--;
+      const r=RAR[TOPIC_RAR[t]];S.coins+=r.coins;B.coinsEarned+=r.coins;S.trophies++;if(r.rank>B.best)B.best=r.rank;
+      if(B.cfg.mode!=='duel'&&B.streak>=4&&S.levels[t]<MAXLVL[t]){S.levels[t]++;B.streak=0;setTimeout(()=>toast(`⬆️ עלית רמה ב${TOPIC_NM[t]}! רמה ${S.levels[t]}`),1000)}
+      checkMilestones();
+    }else{
+      B.streak=0;B.wrongStreak++;S.coins+=FAIL_COINS;B.coinsEarned+=FAIL_COINS;
+      st.misses[q.key]=st.misses[q.key]||{q:q.text,ans:q.ans,n:0,t};st.misses[q.key].n++;
+      if(!q.isRetry&&B.cfg.mode!=='duel')B.retry.push({at:B.i+3,q:Object.assign({},q,{isRetry:true})});
+      if(B.cfg.mode!=='duel'&&B.wrongStreak>=2&&S.levels[t]>1){S.levels[t]--;B.wrongStreak=0}
+    }
+    save();B.timer=setTimeout(nextBattleQ,ok?1100:2000);
+  }});
+}
+function endBattle(){if(B.timer){clearTimeout(B.timer);B.timer=null}CUR=null;
+  S.stats.battles++;S.days.todayCount++;
+  const won=B.cfg.mode==='boss'?B.hp<=0:B.cfg.mode==='duel'?B.me>B.opp:true;
+  if(B.cfg.mode==='duel'&&won){S.duelWins=S.duelWins||{};S.duelWins[B.cfg.opp]=(S.duelWins[B.cfg.opp]||0)+1;S.coins+=25;B.coinsEarned+=25;S.trophies+=3;checkMilestones()}
+  let bestR=B.best?Object.values(RAR).find(r=>r.rank===B.best):null;
+  if(B.cfg.mode==='boss'&&won){bestR=RAR.ultra;S.trophies+=5;checkMilestones()}
+  save();
+  render(`<div class="center" style="padding-top:10px">
+    <h1>${B.cfg.mode==='boss'?(won?'הבוס הובס! 👹💥':'הבוס ברח... 😤'):B.cfg.mode==='duel'?(won?`ניצחת את ${BRAWLERS[B.cfg.opp].nm}! 🥊🏅`:B.me===B.opp?'תיקו! 🤝':`${BRAWLERS[B.cfg.opp].nm} ניצח הפעם 😤`):'סיום הקרב! 🎉'}</h1>
+    ${B.cfg.mode==='duel'?`<div class="score"><span>${esc(S.name)}</span><b><bdi dir="ltr">${B.me} : ${B.opp}</bdi></b><span>${BRAWLERS[B.cfg.opp].nm}</span></div>${won?'<p style="color:var(--yellow)">בונוס ניצחון: +25 🪙 +3 🏆</p>':''}`:''}
+    <div class="card"><div class="row sp"><span>תשובות נכונות</span><b style="font-size:26px"><bdi dir="ltr">${B.correct} / ${B.i}</bdi></b></div>
+    <div class="row sp"><span>מטבעות שהרווחת</span><b style="font-size:26px;color:var(--yellow)">+${B.coinsEarned} 🪙</b></div>
+    <div class="row sp"><span>גביעים</span><b style="font-size:26px">+${B.correct+(B.cfg.mode==='boss'&&won?5:0)+(B.cfg.mode==='duel'&&won?3:0)} 🏆</b></div></div>
+    ${bestR?`<h2>Starr Drop ${bestR.ic}</h2><div id="drop" class="drop shake ${bestR.cls}" onclick="openDrop('${bestR.cls}')">🎁</div><p class="muted" id="dropHint">לחץ על הקופסה!</p>`:`<p class="muted">הפעם בלי Starr Drop. בפעם הבאה! 💪</p>`}
+    <div id="after" class="${bestR?'hidden':''}">
+      ${B.revealed>=B.n||B.correct>=5?`<button class="p big" onclick="screenColor('${B.brawler}')">🎨 צבע את ${BRAWLERS[B.brawler].nm}!</button>`:`<p class="muted">תשובות נכונות חושפות את הציור — ${B.correct<5?'עוד קצת ונצבע!':''}</p>`}
+      <div class="row" style="margin-top:10px"><button class="y grow" onclick="startBattle(B.cfg)">עוד קרב! ⚔️</button><button class="gray grow" onclick="screenHome()">🏠 הביתה</button></div>
+    </div></div>`);
+}
+function openDrop(cls){
+  const d=$('#drop');if(!d||d.dataset.open)return;d.dataset.open=1;d.classList.remove('shake');
+  const r=Object.values(RAR).find(x=>x.cls===cls);const bonus=r.coins;S.coins+=bonus;save();
+  if(r.rank>=5)SND.ultra();else SND.fanfare();
+  d.innerHTML=`<span style="font-size:40px">${r.ic}</span>`;$('#dropHint').innerHTML=`<b style="font-size:26px">${r.nm}!</b><br>בונוס +${bonus} 🪙`;
+  setTimeout(()=>{$('#after').classList.remove('hidden')},500);
+}
+
+/* --- מסך שאלה --- */
+let CUR=null;
+function showQuestion(q,o){
+  CUR={q,o,input:'',locked:false};
+  const r=RAR[TOPIC_RAR[q.topic]];
+  let body='';
+  if(q.type==='num'){
+    body=`<div class="question">${q.isWord?`<div style="font-size:24px;line-height:1.5">${esc(q.text)}</div>`:q.vert?`<div class="vert"><div><span>&nbsp;</span>${q.vert.a}</div><div><span>${q.vert.op}</span>${q.vert.b}</div></div>`:`<div class="math">${esc(q.text)}</div>`}</div>
+    <div class="answerbox" id="ans">&nbsp;</div>
+    <div class="keypad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button onclick="kp('${n}')">${n}</button>`).join('')}<button class="del" onclick="kp('del')">⌫</button><button onclick="kp('0')">0</button><button class="ok" onclick="kp('ok')">✔</button></div>`;
+  }else{
+    const word=q.letter?`<div class="word">${q.text.split('').map(c=>c==='_'?'<span class="blank">&nbsp;</span>':esc(c)).join('')}</div>`:`<div style="font-size:${q.text.length>14?26:40}px">${esc(q.text)}</div>`;
+    body=`<div class="question"><div class="muted" style="font-size:20px">${esc(q.prompt||'')}</div>${q.emoji?`<div class="emoji">${q.emoji}</div>`:''}${word}</div>
+    <div class="opts ${q.opts.length===2&&!q.letter?'':''}">${q.opts.map(op=>`<button class="${q.letter?'letter':''}" onclick="mc(this,'${esc(op).replace(/'/g,'&#39;')}')">${esc(op)}</button>`).join('')}</div>`;
+  }
+  const reveal=o.reveal?`<div class="reveal">${brSVG(B.brawler)}<div class="tiles">${Array.from({length:9},(_,i)=>`<div class="tile ${i<B.revealed?'gone':''}">${i<B.revealed?'':'❔'}</div>`).join('')}</div></div>`:'';
+  render(`<div class="topbar"><button class="small gray" onclick="quitBattle()">✖</button><span class="pill">${o.title}</span><span class="pill">🪙 <b>${S.coins}</b></span></div>
+    <div class="progress"><i style="width:${Math.round(o.progress*100)}%"></i></div>
+    ${o.header||''}
+    ${o.boss!=null?`<div class="row"><span>👹</span><div class="progress hp grow"><i style="width:${Math.round(o.boss*100)}%"></i></div></div>`:''}
+    ${reveal}
+    <div class="row sp" style="margin-top:8px"><span class="badge ${r.cls}">${o.noReward?TOPIC_NM[q.topic]:r.ic+' '+r.nm+' · '+r.coins+' 🪙'}</span>
+    <span><button class="small gray" onclick="speak(CUR.q.spk)">🔊</button> <button class="small gray" onclick="hint()">💡 רמז</button></span></div>
+    <div class="card">${body}</div>
+    <div id="hintBox" class="card flat hidden" style="font-size:20px"></div>`);
+  if(q.isWord&&S.settings.speech)setTimeout(()=>speak(q.spk),300);
+}
+function hint(){const h=$('#hintBox');h.classList.remove('hidden');h.innerHTML='💡 '+esc(CUR.q.hint)}
+function kp(k){if(CUR.locked)return;SND.tap();
+  if(k==='del')CUR.input=CUR.input.slice(0,-1);else if(k==='ok'){if(CUR.input==='')return;return answer(CUR.input)}else if(CUR.input.length<5)CUR.input+=k;
+  $('#ans').innerHTML=CUR.input||'&nbsp;'}
+function mc(btn,v){if(CUR.locked)return;SND.tap();answer(v)}
+function answer(v){
+  CUR.locked=true;const q=CUR.q;const ok=String(v).trim()===String(q.ans);
+  const r=RAR[TOPIC_RAR[q.topic]];
+  if(ok){SND.good();feedback(CUR.o.noReward?'✔ נכון!':`✔ נכון! ${r.ic} ${r.nm}<br><span style="font-size:20px">+${r.coins} 🪙 &nbsp; +1 🏆</span>`);
+    if(B&&CUR.o.reveal){const t=document.querySelectorAll('.tile')[B.revealed];if(t){t.classList.add('gone')}}
+  }else{SND.bad();const full=q.letter?q.word:q.ans;feedback(`כמעט! 😅<br><span style="font-size:22px">התשובה: <b>${esc(full)}</b></span>${CUR.o.noReward?'':`<br><span style="font-size:18px">+${FAIL_COINS} 🪙</span>`}`,true)}
+  CUR.o.onAnswer(ok,q);
+}
+function quitBattle(){if(B&&B.timer)clearTimeout(B.timer);if(D&&D.timer){clearTimeout(D.timer);D=null}CUR=null;if(B&&B.i>0){endBattle()}else{B=null;S.diag?screenHome():screenDiagIntro()}}
+
+/* --- צביעה --- */
+let C=null;
+const PALETTE=['#ff4d5e','#ff9f1a','#ffd400','#39d353','#1e8449','#2f8cff','#1b3fa0','#b05cff','#ff6fae','#6b3a1e','#f5c9a2','#222222','#9aa0c8','#ffffff'];
+function screenColor(id,fills=null,idx=null){
+  C={id,color:PALETTE[0],fills:fills||{},idx};
+  render(`${topbar('screenHome()')}<h2 class="center">🎨 צבע את ${BRAWLERS[id].nm}</h2>
+    <div id="cv">${brSVG(id,'outline',fills)}</div>
+    <div class="palette">${PALETTE.map(c=>`<div class="swatch ${c===C.color?'sel':''}" style="background:${c}" onclick="setColor('${c}')"></div>`).join('')}</div>
+    <div class="row"><button class="g grow" onclick="saveColor()">💾 שמור לגלריה</button><button class="gray grow" onclick="printColor()">🖨️ הדפס לצביעה</button></div>
+    <p class="center muted" style="font-size:14px">לחץ על חלק בציור כדי לצבוע אותו. לבן = מחק.</p>`);
+  const svg=$('#cv svg');svg.classList.add('color-svg');
+  svg.querySelectorAll('.rg').forEach((el,i)=>{el.addEventListener('click',()=>{el.setAttribute('fill',C.color);C.fills[i]=C.color;SND.tap()})});
+}
+function setColor(c){C.color=c;document.querySelectorAll('.swatch').forEach(s=>s.classList.toggle('sel',s.style.backgroundColor===hexToRgb(c)||s.getAttribute('style').includes(c)))}
+function hexToRgb(h){const n=parseInt(h.slice(1),16);return `rgb(${n>>16}, ${(n>>8)&255}, ${n&255})`}
+function saveColor(){const e={b:C.id,fills:C.fills,d:today()};if(C.idx!=null)S.gallery[C.idx]=e;else S.gallery.unshift(e);save();SND.coin();toast('נשמר בגלריה! 🎨');screenGallery()}
+function printColor(){$('#printArea').innerHTML=`<h2>${BRAWLERS[C.id].nm} — צבע אותי!</h2>${brSVG(C.id,'outline')}`;window.print()}
+function screenGallery(){
+  render(`${topbar('screenHome()')}<h2 class="center">🎨 הגלריה של ${esc(S.name)}</h2>
+    ${S.gallery.length?`<div class="gallery">${S.gallery.map((g,i)=>`<div class="bcard" onclick="screenColor('${g.b}',S.gallery[${i}].fills,${i})"><div class="avatar">${brSVG(g.b,'outline',g.fills)}</div><div class="nm">${BRAWLERS[g.b].nm}</div></div>`).join('')}</div>`:`<div class="card center"><p>עוד אין ציורים. נצח בקרב ותוכל לצבוע ברוולר!</p></div>`}
+    <h3 class="center" style="margin-top:20px">דפי צביעה להדפסה</h3>
+    <div class="brawlers">${BR_ORDER.map(b=>`<div class="bcard" onclick="screenColor('${b}')"><div class="avatar sm" style="margin:auto">${brSVG(b,'outline')}</div><div class="nm">${BRAWLERS[b].nm}</div></div>`).join('')}</div>`);
+}
+
+/* --- חנות --- */
+function screenShop(){
+  render(`${topbar('screenHome()')}<h2 class="center">🛒 חנות ברוולרים</h2><p class="center muted">לחץ על ברוולר שפתחת כדי לבחור אותו. כל ברוולר חדש פותח יריב בדו-קרב 🥊</p>
+  <div class="brawlers">${BR_ORDER.map(b=>{const br=BRAWLERS[b],un=S.unlocked.includes(b),r=RAR[br.rar];
+    return `<div class="bcard ${un?'':'locked'} ${S.brawler===b?'sel':''}" onclick="shopTap('${b}')"><div class="avatar sm" style="margin:auto">${brSVG(b)}</div><div class="nm">${br.nm}</div><span class="badge ${r.cls}" style="font-size:11px;padding:1px 8px">${r.nm}</span>${un?'':`<div class="cost">🔒 ${br.cost} 🪙</div>`}</div>`}).join('')}</div>`);
+}
+function shopTap(b){const br=BRAWLERS[b];
+  if(S.unlocked.includes(b)){S.brawler=b;save();SND.tap();screenShop();return}
+  if(S.coins>=br.cost){S.coins-=br.cost;S.unlocked.push(b);S.brawler=b;save();SND.fanfare();toast(`🎉 פתחת את ${br.nm}! נפתח יריב חדש בדו-קרב 🥊`,2600);screenShop()}
+  else{SND.bad();toast(`צריך עוד ${br.cost-S.coins} 🪙 — לקרב! ⚔️`)}
+}
+
+/* --- הורים --- */
+let PG={a:0,b:0};
+function screenParentGate(){PG={a:rnd(12,19),b:rnd(6,9)};
+  render(`${topbar('screenHome()')}<div class="card center"><h2>👩‍👦 אזור הורים</h2><p>כמה זה <bdi>${PG.a} × ${PG.b}</bdi>?</p><input type="number" id="pg" placeholder="?" inputmode="numeric"><br><br><button class="y" onclick="parentCheck()">כניסה</button></div>`);
+  setTimeout(()=>$('#pg').focus(),100);
+}
+function parentCheck(){if(parseInt($('#pg').value)===PG.a*PG.b)screenParent();else{toast('לא נכון 😉');screenParentGate()}}
+function screenParent(){
+  const st=S.stats;const acc=st.answered?Math.round(st.correct/st.answered*100):0;
+  const misses=Object.values(st.misses).sort((a,b)=>b.n-a.n).slice(0,8);
+  render(`${topbar('screenHome()')}<h2>👩‍👦 לוח ההורים</h2>
+  <div class="card"><h3>רמות (1 = התחלה) · ${GRADE_NM[S.grade]}</h3>${gradeTopics().map(t=>{const p=st.perTopic[t];return `<div class="stat"><span>${TOPIC_NM[t]}</span><span><span class="lvl">רמה <bdi dir="ltr">${S.levels[t]} / ${MAXLVL[t]}</bdi></span> <span class="muted" style="font-size:14px">${p?`<bdi dir="ltr">${p.c}/${p.a}</bdi> נכון`:''}</span></span></div>`}).join('')}</div>
+  <div class="card"><h3>סטטיסטיקה</h3><div class="stat"><span>קרבות</span><b>${st.battles}</b></div><div class="stat"><span>שאלות</span><b>${st.answered}</b></div><div class="stat"><span>דיוק</span><b>${acc}%</b></div><div class="stat"><span>רצף ימים</span><b>${S.days.streak}</b></div><div class="stat"><span>קרבות היום</span><b>${S.days.todayCount}</b></div></div>
+  <div class="card"><h3>שגיאות חוזרות</h3>${misses.length?misses.map(m=>`<div class="stat"><span><bdi>${esc(m.q)}</bdi> <span class="muted">(${TOPIC_NM[m.t]||m.t})</span></span><span>${esc(m.ans)} · ×${m.n}</span></div>`).join(''):'<p class="muted">עדיין אין</p>'}</div>
+  <div class="card"><h3>הוסף מילת כתיב מבית הספר</h3><p class="muted" style="font-size:15px">כתבי מילה, לחצי על האות המבלבלת, ואז כתבי את האות השגויה שהוא נוטה לכתוב.</p>
+    <input type="text" id="cw" placeholder="למשל: תפוח" oninput="customLetters()"><div id="cl" class="row wrap" style="margin:8px 0;justify-content:center"></div>
+    <div class="muted" style="font-size:14px">מילים שלך: ${S.custom.length?S.custom.map(c=>c[0]).join(', '):'אין'} ${S.custom.length?`<button class="small gray" onclick="S.custom=[];save();screenParent()">נקה</button>`:''}</div></div>
+  <div class="card"><h3>הגדרות</h3>
+    <div class="stat"><span>צלילים</span><button class="small ${S.settings.sound?'g':'gray'}" onclick="S.settings.sound=!S.settings.sound;save();screenParent()">${S.settings.sound?'פועל':'כבוי'}</button></div>
+    <div class="stat"><span>הקראה בקול</span><button class="small ${S.settings.speech?'g':'gray'}" onclick="S.settings.speech=!S.settings.speech;save();screenParent()">${S.settings.speech?'פועל':'כבוי'}</button></div>
+    <div class="stat"><span>אבחון מחדש</span><button class="small o" onclick="S.diag=false;save();screenDiagIntro()">הפעל</button></div>
+    <div class="stat"><span>כיתה</span><span>${['a','b','c'].map(g=>`<button class="small ${S.grade===g?'y':'gray'}" style="margin:2px" onclick="S.grade='${g}';S.diag=false;save();screenDiagIntro()">${GRADE_NM[g]}</button>`).join('')}</span></div>
+    <div class="stat"><span>רמה ידנית</span><span>${gradeTopics().map(t=>`<button class="small gray" style="margin:2px" onclick="S.levels['${t}']=S.levels['${t}']%MAXLVL['${t}']+1;save();screenParent()">${TOPIC_NM[t]} ${S.levels[t]}</button>`).join('')}</span></div>
+  </div>
+  <div class="card"><h3>גיבוי</h3><div class="row"><button class="small gray grow" onclick="exportSave()">📤 העתק גיבוי</button><button class="small gray grow" onclick="importSave()">📥 שחזר</button><button class="small r grow" onclick="resetAll()">🗑️ אפס הכול</button></div></div>`);
+}
+function customLetters(){const w=$('#cw').value.trim();$('#cl').innerHTML=w.split('').map((c,i)=>`<button class="small gray" onclick="customPick('${esc(w)}',${i})">${esc(c)}</button>`).join('')}
+function customPick(w,i){const bad=prompt(`איזו אות הוא נוטה לכתוב במקום "${w[i]}"?`);if(!bad)return;S.custom.push([w,i,w[i],bad.trim()[0]]);save();toast('נוסף ל-Showdown! 🌵');screenParent()}
+function exportSave(){const s=JSON.stringify(S);if(navigator.clipboard){navigator.clipboard.writeText(s).then(()=>toast('הגיבוי הועתק. הדביקי באימייל/פתקים.'))}else prompt('העתיקי:',s)}
+function importSave(){const s=prompt('הדביקי את הגיבוי:');if(!s)return;try{S=deepMerge(JSON.parse(JSON.stringify(DEFAULT)),JSON.parse(s));save();toast('שוחזר!');screenParent()}catch(e){toast('הגיבוי לא תקין')}}
+function resetAll(){if(confirm('לאפס את כל ההתקדמות של '+S.name+'? אין דרך חזרה.')){localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEFAULT));screenStart()}}
+
+/* ===================== התחלה ===================== */
+if('speechSynthesis' in window){speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices()}
+document.addEventListener('touchstart',()=>ac(),{once:true});
+document.addEventListener('keydown',e=>{
+  const tag=(document.activeElement||{}).tagName;
+  if(tag==='INPUT'){if(e.key==='Enter'){if($('#nm'))setName();else if($('#pg'))parentCheck()}return}
+  if(!CUR||CUR.locked)return;
+  if(CUR.q.type==='num'){if(/^[0-9]$/.test(e.key))kp(e.key);else if(e.key==='Backspace')kp('del');else if(e.key==='Enter')kp('ok')}
+  else{const n=parseInt(e.key);if(n>=1&&n<=CUR.q.opts.length){const b=document.querySelectorAll('.opts button')[n-1];if(b)b.click()}}
+});
+screenStart();
+</script>
+</body>
+</html>
